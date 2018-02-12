@@ -6,8 +6,8 @@ class db
 	{
 		// DB Settings Change this to you MySQL Login
 		$host="localhost";
-		$user="hwmon";
-		$pass="123pass";
+		$user="DBUSER";
+		$pass="DBPASS";
 		$dbname="hwmon";
 
 		// DB Connector
