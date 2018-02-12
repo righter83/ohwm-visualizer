@@ -7,22 +7,32 @@ $db=new db();
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <canvas id="both-hourly" width="600" height="300"></canvas>
+<canvas id="canvas"></canvas>
 
 <?php
-$set=$db->fetch("select * from datasets where id=$_GET[id]");
 
+// calc intermediate line
+$sum=$db->fetch("select sum(cpu) as sum from data where id=$_GET[id]");
+$amount=$db->fetch("select count(cpu) as count from data where id=$_GET[id]");
+$average=round($sum->sum/$amount->count);
+
+// get data from DB
+$set=$db->fetch("select * from datasets where id=$_GET[id]");
 $data=$db->fetch("select * from data where id=$set->id");
 $labels="";
 $vals="";
 $vals2="";
+$vals3="";
 $x=0;
 foreach ($data as $res)
 {
-	$labels="$set->date,".$labels;
+	//$labels="$set->date,".$labels;
+	$labels=",".$labels;
 	$val=$res->cpu;
 	$vals="\"$val\",".$vals;
 	$val2=$res->ram;
 	$vals2="\"$val2\",".$vals2;
+	$vals3="\"$average\",".$vals3;
 }
 ?>
 
@@ -39,6 +49,12 @@ new Chart(document.getElementById("both-hourly"),
                 data: [<?php echo $vals2; ?>],
                 label: "RAM usage in GB",
                 borderColor: "orange",
+                fill: false
+            },
+			{
+                data: [<?php echo $vals3; ?>],
+                label: "Average CPU usage is <?php echo $average; ?>%",
+                borderColor: "green",
                 fill: false
             },
 			{
@@ -79,7 +95,7 @@ new Chart(document.getElementById("both-hourly"),
         		}
 			]
     	}
-  	}
+  	},
 });
 </script>
 
