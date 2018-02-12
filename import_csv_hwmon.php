@@ -1,9 +1,9 @@
 #!/usr/bin/php
 <?php
 
-// User 
+// User If you want to import multiple User/PC reports you have to define a name for the User/PC
 $user="Valente";
-// Folder with CSVs
+// Folder with CSVs. Here are all reports of that User/PC
 $folder="OpenHardwareMonitor_Valente";
 
 include_once("db_connect.php");
